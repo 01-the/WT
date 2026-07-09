@@ -51,9 +51,11 @@ async function getArticleUrl() {
 // Pure function: HTML in, data out. No network calls — this is what gets
 // unit-tested against scripts/fixture.html in scripts/test-parse.mjs.
 export function parseArticleHtml(html, url) {
-  // Allow for closing tags (e.g. </strong>) sitting between </a> and the
-  // song title text — real wol.jw.org markup wraps "SONG 133" in <strong>.
-  const songMatches = [...html.matchAll(/>SONG\s+(\d+)<\/a>(?:<\/[a-z0-9]+>)*\s*([^<]+)/gi)];
+  // Real wol.jw.org markup nests the bold *inside* the link:
+  // <a href="..."><strong>SONG 98</strong></a> Title Text
+  // (not <strong><a>...</a></strong> as originally assumed) — so allow
+  // closing tags both before AND after </a>.
+  const songMatches = [...html.matchAll(/>SONG\s+(\d+)(?:<\/[a-z0-9]+>)*<\/a>(?:<\/[a-z0-9]+>)*\s*([^<]+)/gi)];
   const openingSong = songMatches[0]
     ? `Song ${songMatches[0][1]} – ${stripTags(songMatches[0][2])}`
     : null;
