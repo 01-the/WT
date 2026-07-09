@@ -1,0 +1,10 @@
+{% assign d = IDX_0 %}
+<div class="view view--quadrant">
+  <div class="layout layout--col gap--tiny">
+    <span class="title title--small">{{ d.title | default: "Watchtower Study" }}</span>
+    <span class="description text--small">{{ d.week_range }}</span>
+    {% if d.focus %}
+      <span class="value value--xsmall">{{ d.focus }}</span>
+    {% endif %}
+  </div>
+</div>

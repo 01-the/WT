@@ -1,0 +1,72 @@
+{% comment %}
+  Watchtower Study — Full layout
+
+  NOTE ON VARIABLE PREFIX: with the Polling strategy, TRMNL exposes your
+  JSON under an index node (IDX_0 for the first/only polling URL). If,
+  after a force refresh, "Edit Markup > Your Variables" shows the fields
+  at the TOP level instead (title, theme, etc. with no IDX_0 wrapper),
+  just delete every "IDX_0." below.
+{% endcomment %}
+{% assign d = IDX_0 %}
+
+<div class="view view--full">
+  <div class="layout layout--col gap--small">
+
+    <div class="title_bar">
+      <span class="title">{{ d.title | default: "Watchtower Study" }}</span>
+      <span class="instance">{{ d.week_range }}</span>
+    </div>
+
+    {% if d.opening_song %}
+      <div class="text--small text--gray">{{ d.opening_song }}</div>
+    {% endif %}
+
+    {% if d.theme %}
+      <div class="richtext content--center" style="font-style: italic; margin: 4px 0 8px 0;">
+        {{ d.theme }}
+      </div>
+    {% endif %}
+
+    {% if d.focus %}
+      <div class="item bordered" style="padding: 8px 10px; margin-bottom: 8px;">
+        <span class="label">FOCUS</span>
+        <span class="value value--small">{{ d.focus }}</span>
+      </div>
+    {% endif %}
+
+    {% if d.subheadings and d.subheadings.size > 0 %}
+      <div class="content">
+        <span class="label">Subheadings</span>
+        <ul class="list">
+          {% for h in d.subheadings %}
+            <li class="item">
+              <span class="index">{{ forloop.index }}</span>
+              <span class="value value--small">{{ h }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if d.review_questions and d.review_questions.size > 0 %}
+      <div class="content">
+        <span class="label">How Would You Answer?</span>
+        <ul class="list">
+          {% for q in d.review_questions %}
+            <li class="item">
+              <span class="index">{{ forloop.index }}</span>
+              <span class="description">{{ q }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+  </div>
+
+  <div class="title_bar title_bar--footer">
+    {% if d.closing_song %}
+      <span class="instance">{{ d.closing_song }}</span>
+    {% endif %}
+  </div>
+</div>

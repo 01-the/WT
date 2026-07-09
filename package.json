@@ -1,0 +1,11 @@
+{
+  "name": "trmnl-watchtower-study",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Scrapes this week's Watchtower Study article from wol.jw.org into JSON for a TRMNL private plugin.",
+  "scripts": {
+    "test": "node scripts/test-parse.mjs",
+    "scrape": "node scripts/scrape.mjs"
+  }
+}

@@ -1,0 +1,24 @@
+{% assign d = IDX_0 %}
+<div class="view view--half_vertical">
+  <div class="layout layout--col gap--small">
+    <div class="title_bar">
+      <span class="title">{{ d.title | default: "Watchtower Study" }}</span>
+      <span class="instance">{{ d.week_range }}</span>
+    </div>
+
+    {% if d.theme %}
+      <div class="richtext" style="font-style: italic; font-size: 0.9em;">{{ d.theme }}</div>
+    {% endif %}
+
+    {% if d.subheadings and d.subheadings.size > 0 %}
+      <ul class="list">
+        {% for h in d.subheadings %}
+          <li class="item">
+            <span class="index">{{ forloop.index }}</span>
+            <span class="value value--small">{{ h }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</div>

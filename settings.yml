@@ -1,0 +1,11 @@
+name: Watchtower Study
+strategy: polling
+refresh_interval: 720 # minutes (12h) — content only changes weekly
+# Use jsDelivr's GitHub CDN rather than raw.githubusercontent.com — it's
+# properly cached/CORS-friendly for repeated automated polling, and the
+# workflow purges it on every update so you're not stuck on stale data.
+# Replace USERNAME/REPO with your actual GitHub username and repo name.
+polling_url: https://cdn.jsdelivr.net/gh/USERNAME/REPO@main/data/watchtower.json
+polling_headers: ''
+polling_verb: GET
+dark_mode: no

@@ -1,0 +1,45 @@
+name: Update Watchtower Study data
+
+on:
+  schedule:
+    # 20:00 UTC daily = 06:00 AEST / 07:00 AEDT next day in Sydney.
+    # Runs daily (not just weekly) so it self-heals quickly if one run
+    # fails, and so the article is already cached before Sydney wakes up.
+    - cron: '0 20 * * *'
+  workflow_dispatch: {} # lets you trigger it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run test suite
+        run: node scripts/test-parse.mjs
+
+      - name: Scrape this week's Watchtower Study article
+        run: node scripts/scrape.mjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/watchtower.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update Watchtower Study data ($(date -u +%Y-%m-%d))"
+            git push
+          fi
+
+      - name: Purge jsDelivr CDN cache
+        if: success()
+        run: |
+          curl -s "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/data/watchtower.json" || true
