@@ -6,6 +6,9 @@ const html = await readFile(new URL("./fixture.html", import.meta.url), "utf-8")
 const result = parseArticleHtml(html, "https://example.com/fixture");
 console.log(JSON.stringify(result, null, 2));
 
+const htmlFocusSeparate = await readFile(new URL("./fixture-focus-separate.html", import.meta.url), "utf-8");
+const resultFocusSeparate = parseArticleHtml(htmlFocusSeparate, "https://example.com/fixture-focus-separate");
+
 const checks = [
   ["title", result.title === "Make Wise Decisions Regarding Additional Education"],
   ["opening_song", result.opening_song === "Song 133 – Worship Jehovah During Youth"],
@@ -13,6 +16,7 @@ const checks = [
   ["theme includes quote", result.theme.includes("shrewd one ponders")],
   ["theme has matching curly quotes", result.theme.startsWith("“") && result.theme.includes("”—PROV")],
   ["focus text", result.focus === "Factors and Bible principles to consider when deciding whether to obtain additional education."],
+  ["focus text (label+text in separate <p> tags)", resultFocusSeparate.focus === "Factors and Bible principles to consider when deciding whether to obtain additional education."],
   ["subheadings count == 3", result.subheadings.length === 3],
   ["subheadings excludes boxes", !result.subheadings.some(s => /bible principles|how would you answer/i.test(s))],
   ["review count == 3", result.review_questions.length === 3],
