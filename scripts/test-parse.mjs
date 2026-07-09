@@ -6,8 +6,8 @@ const html = await readFile(new URL("./fixture.html", import.meta.url), "utf-8")
 const result = parseArticleHtml(html, "https://example.com/fixture");
 console.log(JSON.stringify(result, null, 2));
 
-const htmlFocusSeparate = await readFile(new URL("./fixture-focus-separate.html", import.meta.url), "utf-8");
-const resultFocusSeparate = parseArticleHtml(htmlFocusSeparate, "https://example.com/fixture-focus-separate");
+const htmlFocusSeparate = await readFile(new URL("./fixture.html", import.meta.url), "utf-8");
+const resultFocusSeparate = parseArticleHtml(htmlFocusSeparate, "https://example.com/fixture");
 
 const checks = [
   ["title", result.title === "Make Wise Decisions Regarding Additional Education"],
