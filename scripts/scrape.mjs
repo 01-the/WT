@@ -74,12 +74,22 @@ export function parseArticleHtml(html, url) {
     if (themeMatch) theme = stripTags(themeMatch[1]);
   }
 
-  // Capture the *whole paragraph* containing the FOCUS label — handles both
-  // "FOCUS" in its own tag AND "FOCUS: text" inline in the same <p>, which
-  // is how wol.jw.org actually marks it up.
+  // FOCUS markup varies: sometimes "FOCUS: text" is one <p>, sometimes
+  // "FOCUS" is its own <p> with the actual text in the next <p>. Try the
+  // same-paragraph case first; if that captures nothing, fall through to
+  // the next <p> after the label.
   let focus = "";
-  const focusMatch = html.match(/<p[^>]*>\s*(?:<strong>)?\s*FOCUS\s*(?:<\/strong>)?\s*:?\s*([\s\S]*?)<\/p>/i);
-  if (focusMatch) focus = stripTags(focusMatch[1]);
+  const focusLabelMatch = html.match(/<p[^>]*>\s*(?:<strong>)?\s*FOCUS\s*(?:<\/strong>)?\s*:?\s*([\s\S]*?)<\/p>/i);
+  if (focusLabelMatch) {
+    const inline = stripTags(focusLabelMatch[1]);
+    if (inline) {
+      focus = inline;
+    } else {
+      const after = html.slice(focusLabelMatch.index + focusLabelMatch[0].length);
+      const nextP = after.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+      if (nextP) focus = stripTags(nextP[1]);
+    }
+  }
 
   const excluded = ["bible principles to consider", "how would you answer?", "how would you answer"];
   const subheadings = [];
